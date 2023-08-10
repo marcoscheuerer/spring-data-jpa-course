@@ -1,6 +1,8 @@
 package mao.linatrix.springboot.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,8 +23,11 @@ public class Product {
     // define fields
     // Hibernate creates PRIMARY KEY
     @Id
-    // Hibernate creates AUTO_INCREMENT
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE,
+                    generator = "product_generator")
+    @SequenceGenerator(name="product_generator",
+                       sequenceName = "product_sequence_name",
+                       allocationSize = 1)
     private Long id;
 
     @Column(name = "stock_keeping_unit",
@@ -44,7 +49,10 @@ public class Product {
     // e.g. imageUrl -> image_url
     private String imageUrl;
 
+    @CreationTimestamp
     private LocalDateTime dateCreated;
+
+    @UpdateTimestamp
     private LocalDateTime lastUpdated;
 
     // define constructors
