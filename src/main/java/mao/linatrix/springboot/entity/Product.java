@@ -6,17 +6,44 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(
+        name="products",
+        schema = "ecommerce",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "sku_unique",
+                        columnNames = "stock_keeping_unit"
+                )
+        }
+)
 public class Product {
 
     // define fields
+    // Hibernate creates PRIMARY KEY
     @Id
+    // Hibernate creates AUTO_INCREMENT
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "stock_keeping_unit",
+            nullable = false)
     private String sku;
+
+    @Column(nullable=false)
     private String name;
+
     private String description;
+
     private BigDecimal price;
+
+    @Column(nullable = false)
     private boolean active;
+
+    // Hibernate transfer field names from camelCase to
+    // snake_case when no column name is given
+    // e.g. imageUrl -> image_url
     private String imageUrl;
+
     private LocalDateTime dateCreated;
     private LocalDateTime lastUpdated;
 
@@ -24,10 +51,10 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String sku, String name, String description, BigDecimal price,
+    public Product(Long id, String stockKeepingUnit, String name, String description, BigDecimal price,
                    boolean active, String imageUrl, LocalDateTime dateCreated, LocalDateTime lastUpdated) {
         this.id = id;
-        this.sku = sku;
+        this.sku = stockKeepingUnit;
         this.name = name;
         this.description = description;
         this.price = price;
@@ -46,11 +73,11 @@ public class Product {
         this.id = id;
     }
 
-    public String getStockKeepingUnitu() {
+    public String getSku() {
         return sku;
     }
 
-    public void setStoKeepingUnit(String sku) {
+    public void setSku(String sku) {
         this.sku = sku;
     }
 
